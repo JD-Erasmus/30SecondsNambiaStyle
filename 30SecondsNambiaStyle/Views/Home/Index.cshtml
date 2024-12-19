@@ -1,88 +1,199 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .game-container {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f9c46b, #e76f51);
+            padding: 2rem;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to 30 Seconds Namibia Style!</h1>
-    <p class="lead">Click the button below to generate a random card and start the timer!</p>
-    <button id="generateCardsBtn" class="btn btn-primary btn-lg mt-3">Generate Cards</button>
-    <div id="timerDisplay" class="mt-3" style="font-size: 1.5rem; font-weight: bold;"></div>
+        .card-container {
+            perspective: 1000px;
+            margin: 20px auto;
+            width: 300px;
+            height: 400px;
+        }
+
+        .card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+            border-radius: 15px;
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card-front {
+            background: linear-gradient(45deg, #264653, #2a9d8f);
+            color: white;
+        }
+
+        .card-back {
+            background: white;
+            transform: rotateY(180deg);
+        }
+
+        .word-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        .word-item {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+            text-align: center;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .word-item:hover {
+            transform: translateX(10px);
+            background: rgba(255,255,255,0.2);
+        }
+
+        .timer {
+            font-size: 3em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+
+        .btn-generate {
+            background: #e76f51;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0,0,0,0.3);
+        }
+
+        .game-title {
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        
+
+        .card-container {
+            animation: cardAppear 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container text-center">
+        <h1 class="game-title display-4">30 Seconds Namibia Style</h1>
+        <button id="generateCardsBtn" class="btn-generate">New Card</button>
+        <div id="timerDisplay" class="timer"></div>
+        <div id="cardsContainer" class="card-container">
+            <div class="card">
+                <div class="card-face card-front">
+                    <h2>30 Seconds</h2>
+                    <p>Click to reveal words</p>
+                </div>
+                <div class="card-face card-back">
+                    <ul class="word-list" id="wordList"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        const card = document.querySelector('.card');
+        
+        function flipCard() {
+            card.classList.toggle('flipped');
+        }
+
+        function startTimer(durationInSeconds) {
+            const timerDisplay = document.getElementById("timerDisplay");
+            let remainingTime = durationInSeconds;
+            
+            timerDisplay.textContent = remainingTime;
+            
+            clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                remainingTime--;
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "Time's up!";
+                    setTimeout(() => {
+                        if (confirm("Time's up! Want to play another round?")) {
+                            generateNewCard();
+                        }
+                    }, 500);
+                } else {
+                    timerDisplay.textContent = remainingTime;
+                }
+            }, 1000);
+        }
+
+        function generateNewCard() {
+            fetch('/Home/GetNamibianCards')
+                .then(response => response.json())
+                .then(data => {
+                    const wordList = document.getElementById("wordList");
+                    wordList.innerHTML = "";
+                    
+                    const randomCard = data[Math.floor(Math.random() * data.length)];
+                    
+                    randomCard.forEach(word => {
+                        const listItem = document.createElement("li");
+                        listItem.className = "word-item";
+                        listItem.textContent = word;
+                        wordList.appendChild(listItem);
+                    });
+
+                    // Reset card to front face
+                    card.classList.remove('flipped');
+                    
+                    // Flip card after a short delay
+                    setTimeout(() => {
+                        card.classList.add('flipped');
+                        startTimer(30);
+                    }, 500);
+                })
+                .catch(error => console.error("Error fetching cards:", error));
+        }
+
+        document.getElementById("generateCardsBtn").addEventListener("click", generateNewCard);
+        card.addEventListener('click', flipCard);
+    </script>
 </div>
-
-<div id="cardsContainer" class="mt-5 container d-flex justify-content-center">
-    <!-- A single card will be dynamically added here -->
-</div>
-
-<script>
-    let timerInterval;
-
-    function startTimer(durationInSeconds) {
-        const timerDisplay = document.getElementById("timerDisplay");
-        let remainingTime = durationInSeconds;
-
-        // Update the timer display every second
-        timerDisplay.textContent = `Time left: ${remainingTime}s`;
-        timerInterval = setInterval(() => {
-            remainingTime--;
-
-            if (remainingTime <= 0) {
-                clearInterval(timerInterval);
-                timerDisplay.textContent = "Time's up!";
-                alert("Time's up! Better luck next round!");
-            } else {
-                timerDisplay.textContent = `Time left: ${remainingTime}s`;
-            }
-        }, 1000);
-    }
-
-    document.getElementById("generateCardsBtn").addEventListener("click", function () {
-        fetch('/Home/GetNamibianCards')
-            .then(response => response.json())
-            .then(data => {
-                const cardsContainer = document.getElementById("cardsContainer");
-                cardsContainer.innerHTML = ""; // Clear the previous card
-
-                // Select a random card from the data
-                const randomCard = data[Math.floor(Math.random() * data.length)];
-
-                // Create a new card element
-                const cardElement = document.createElement("div");
-                cardElement.className = "card m-3";
-                cardElement.style.width = "18rem";
-                cardElement.style.border = "2px solid";
-
-                // Set the border color based on Namibian flag colors
-                const colors = ["red", "blue", "green", "yellow"];
-                cardElement.style.borderColor = colors[Math.floor(Math.random() * colors.length)];
-
-                const cardBody = document.createElement("div");
-                cardBody.className = "card-body";
-
-                // Add card title
-                const cardTitle = document.createElement("h5");
-                cardTitle.className = "card-title";
-                cardTitle.textContent = `Namibian Card`;
-                cardBody.appendChild(cardTitle);
-
-                // Add list of words
-                const cardList = document.createElement("ul");
-                cardList.className = "list-group list-group-flush";
-                randomCard.forEach(word => {
-                    const listItem = document.createElement("li");
-                    listItem.className = "list-group-item";
-                    listItem.textContent = word;
-                    cardList.appendChild(listItem);
-                });
-
-                // Append card body and list to card, then append card to container
-                cardElement.appendChild(cardBody);
-                cardElement.appendChild(cardList);
-                cardsContainer.appendChild(cardElement);
-
-                // Start the 30-second timer
-                clearInterval(timerInterval); // Clear any existing timer
-                startTimer(30);
-            })
-            .catch(error => console.error("Error fetching cards:", error));
-    });
-</script>
+</body>
+</html>
