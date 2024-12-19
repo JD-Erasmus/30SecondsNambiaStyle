@@ -26,9 +26,9 @@
             border-radius: 15px;
         }
 
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
+            .card.flipped {
+                transform: rotateY(180deg);
+            }
 
         .card-face {
             position: absolute;
@@ -70,10 +70,10 @@
             transition: all 0.3s ease;
         }
 
-        .word-item:hover {
-            transform: translateX(10px);
-            background: rgba(255,255,255,0.2);
-        }
+            .word-item:hover {
+                transform: translateX(10px);
+                background: rgba(255,255,255,0.2);
+            }
 
         .timer {
             font-size: 3em;
@@ -95,10 +95,10 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
-        .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(0,0,0,0.3);
-        }
+            .btn-generate:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 7px 20px rgba(0,0,0,0.3);
+            }
 
         .game-title {
             color: white;
@@ -106,7 +106,7 @@
             margin-bottom: 30px;
         }
 
-        
+
 
         .card-container {
             animation: cardAppear 0.5s ease-out;
@@ -114,6 +114,31 @@
     </style>
 </head>
 <body>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body  text-center">
+                    <h6>Time's up! Want to play another round?</h6>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" id="ends" class="btn w-100 btn-outline-danger" data-dismiss="modal">End</button>
+
+
+                    <button type="button" id="restart" class="btn w-100 btn-outline-primary">Restart</button>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    </div>
     <div class="game-container text-center">
         <h1 class="game-title display-4">30 Seconds Namibia Style</h1>
         <button id="generateCardsBtn" class="btn-generate">New Card</button>
@@ -134,7 +159,7 @@
     <script>
         let timerInterval;
         const card = document.querySelector('.card');
-        
+
         function flipCard() {
             card.classList.toggle('flipped');
         }
@@ -142,20 +167,24 @@
         function startTimer(durationInSeconds) {
             const timerDisplay = document.getElementById("timerDisplay");
             let remainingTime = durationInSeconds;
-            
+
             timerDisplay.textContent = remainingTime;
-            
+
             clearInterval(timerInterval);
-            
+
             timerInterval = setInterval(() => {
                 remainingTime--;
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
                     timerDisplay.textContent = "Time's up!";
                     setTimeout(() => {
-                        if (confirm("Time's up! Want to play another round?")) {
-                            generateNewCard();
-                        }
+
+                          $('#exampleModalCenter').modal('show');
+
+                         // $("#exampleModalCenter").show();
+                        // if (confirm("Time's up! Want to play another round?")) {
+                        //     generateNewCard();
+                        // }
                     }, 500);
                 } else {
                     timerDisplay.textContent = remainingTime;
@@ -169,9 +198,9 @@
                 .then(data => {
                     const wordList = document.getElementById("wordList");
                     wordList.innerHTML = "";
-                    
+
                     const randomCard = data[Math.floor(Math.random() * data.length)];
-                    
+
                     randomCard.forEach(word => {
                         const listItem = document.createElement("li");
                         listItem.className = "word-item";
@@ -181,7 +210,7 @@
 
                     // Reset card to front face
                     card.classList.remove('flipped');
-                    
+
                     // Flip card after a short delay
                     setTimeout(() => {
                         card.classList.add('flipped');
@@ -193,7 +222,10 @@
 
         document.getElementById("generateCardsBtn").addEventListener("click", generateNewCard);
         card.addEventListener('click', flipCard);
+
+
+
     </script>
-</div>
+
 </body>
 </html>

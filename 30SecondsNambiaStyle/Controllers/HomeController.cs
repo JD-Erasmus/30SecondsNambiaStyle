@@ -26,7 +26,7 @@ namespace _30SecondsNambiaStyle.Controllers
             "Fishrot", "Windhoek Lager", "Tafel Lager", "Kapana", "Fat Cakes",
             "The Dogg", "King TeeDee", "Sam Nujoma", "Namib Desert", "Etosha",
             "Fish River Canyon", "Skeleton Coast", "Spitzkoppe", "Quiver Tree", "Oshakati",
-            "Herero Dress", "Himba Women", "San Bushmen", "NAMAs", "Ricardo Mannetti",
+            "Herero Dress", "Himba Women", "Bushmen", "NAMAs", "Ricardo Mannetti",
             "Brave Warriors", "Independence Day", "March 21", "Mealie Pap", "Matangara",
             "Oshikundu", "Biltong", "Droëwors", "Meatco", "Bank Windhoek",
             "German Colonial Rule", "Caprivi Strip", "UNAM", "NUST", "Okahandja",
@@ -36,8 +36,8 @@ namespace _30SecondsNambiaStyle.Controllers
             "NBC", "Namibian Sun", "Road Fund Administration", "TransNamib", "Sunburn",
             "Sandwich Harbour", "Desert Adapted Elephants", "Windhoek Showgrounds", "Okavango Delta",
             "Gondwana Lodges", "Safari", "NamibRand Nature Reserve", "Katutura", "Namport",
-            "Old Mutual", "NAMDEB", "Rundu", "Warm Land", "African Time",
-            "Friendly People", "Fat Cakes Vendor", "Kapana Corner", "Namibian Dollar", "Okavango River"
+            "Old Mutual", "NAMDEB", "Rundu", "Warm Land", "African Time","Chula Chula",
+            "Friendly People", "Fat Cakes Vendor", "Kapana Corner", "Namibian Dollar", "Okavango River", "African Stars",
         };
 
             // Shuffle words and group into lists of 5
