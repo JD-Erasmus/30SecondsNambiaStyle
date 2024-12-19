@@ -34,7 +34,7 @@ namespace _30SecondsNambiaStyle.Controllers
             "Deadvlei", "Epupa Falls", "Kolmanskop", "Otjikoto Lake", "Hoba Meteorite",
             "Sam Shivute", "Air Namibia", "Ongwediva Trade Fair", "Hage Geingob", "Land of the Brave",
             "NBC", "Namibian Sun", "Road Fund Administration", "TransNamib", "Sunburn",
-            "Sandwich Harbour", "Desert Adapted Elephants", "Ricardo Goslar", "Windhoek Showgrounds", "Okavango Delta",
+            "Sandwich Harbour", "Desert Adapted Elephants", "Windhoek Showgrounds", "Okavango Delta",
             "Gondwana Lodges", "Safari", "NamibRand Nature Reserve", "Katutura", "Namport",
             "Old Mutual", "NAMDEB", "Rundu", "Warm Land", "African Time",
             "Friendly People", "Fat Cakes Vendor", "Kapana Corner", "Namibian Dollar", "Okavango River"
